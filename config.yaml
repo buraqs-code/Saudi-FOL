@@ -1,0 +1,45 @@
+# FOL Automation — settings
+
+# --------------------------------------------------------------------
+# Where the workbook lives, and how the automation gets permission to open it
+# Used by: stages/01_authentication
+# --------------------------------------------------------------------
+workbook:
+
+  # The person whose OneDrive holds the file.
+  owner_email: buraq@hilalinvest.com
+
+  # The folder inside that OneDrive, from the top level down.
+  folder: AI_AUTOMATIONS/FOL
+
+  # The workbook has been renamed before, so it is found by looking for these
+  # words anywhere in the filename rather than by matching the whole name.
+  filename_contains: Saudi_FO_New
+
+
+# --------------------------------------------------------------------
+# The pages on the Saudi Exchange website the data comes from
+# Used by: stages/02_update_mkt_cap/2a_fetch-data, stages/03_update_FO/3a_fetch-data
+# --------------------------------------------------------------------
+sources:
+
+  market_cap:
+    tasi: https://www.saudiexchange.sa/Resources/Reports-v2/DetailedDaily_en.html
+    nomu: https://www.saudiexchange.sa/Resources/Reports-v2/DetailedDailySme_en.html
+
+  foreign_ownership: https://www.saudiexchange.sa/wps/portal/saudiexchange/newsandreports/reports-publications/foreign-ownership?locale=en
+
+# --------------------------------------------------------------------
+# Who the emails come from, and who gets them
+# Used by: stages/08_send-report
+# --------------------------------------------------------------------
+email:
+
+  # The mailbox every email is sent from.
+  sender: buraq@hilalinvest.com
+
+  # People who read the report. They only ever get the report email.
+  report_recipients: [investmentteam@hilalinvest.com]
+
+  # Whoever looks after the automation. They get the "Run Stopped" / "Run Succeeded" emails.
+  status_recipients: [muhammad.asim@hilalinvest.com, moeenuddin.hashim@hilalinvest.com, buraq@hilalinvest.com]
