@@ -12,6 +12,8 @@ The work is done on throwaway copies of the workbook, never on the workbook itse
 
 ## Process
 
+If `../../run/issues.md` has a line that starts with "No report:", do not do this stage. Go to `stages/08_send-report/`.
+
 1. **Note the report date.** Read the date cell in `EMAIL.1` of the real workbook that every figure works from (currently E3). Find it the way stage 06 does: take a figure in the `Mkt Cap` column and follow its date reference, through row 1, to the cell holding a plain date. This is read only. Step 3 uses it.
 
    Stage 06 has only just changed this cell, so a read straight after can still show the old date. If it shows a date older than the last date in `Mkt_Cap`, wait 30 seconds and read again.

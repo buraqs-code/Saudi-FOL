@@ -34,7 +34,7 @@ The Task: convert the fetched market cap figures to millions, then write today's
 
    Otherwise, compare `market_date` (from the JSON) with the row date:
    - **Same date** — the market was open. Write the fetched figures.
-   - **`market_date` is older** — the market was closed (weekend or holiday). The site still shows the last open day. Copy the row above. Add a line to `../../../run/issues.md` starting **"Market closed:"**, giving the row date, the last open day, and whether the row date is a weekend (Friday or Saturday) or a weekday. Stage 08 reads this line and doesn't send the report.
+   - **`market_date` is older** — the market was closed (weekend or holiday). The site still shows the last open day. Copy the row above. Add a line to `../../../run/issues.md` starting **"Market closed:"**, giving the row date, the last open day, and whether the row date is a weekend (Friday or Saturday) or a weekday. This line is for information only. Stage 06 decides if the report goes out.
    - **`market_date` is newer** — this shouldn't happen. Write nothing, not even the date. Log both dates in `../../../run/issues.md` and skip the rest of this stage.
 
    **The last open day** is the day the copied figures really come from. The row above may itself be a copy, so don't just use its date. Use the date the site shows. If nothing was fetched, go up from the row above, past rows with exactly the same figures. The earliest of those is the last open day.

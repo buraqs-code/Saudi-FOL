@@ -1,80 +1,112 @@
-# 06_build_report: point the report at the day just added
+# 06_build_report: set the report date
 
-The Task: change the report's date — the one date cell in the `EMAIL.1` sheet that every figure works from, currently E3 — to the day the earlier stages just added. Nothing else in the sheet is written.
+The Task: set the report date in the `EMAIL.1` sheet. The report date is the last trading day. All figures in the report use this date. Do not write other cells.
+
+The report goes out Sunday to Thursday. Each report shows the previous trading day:
+
+| Run day | Report date |
+|---|---|
+| Sunday | Thursday |
+| Monday | Sunday |
+| Tuesday | Monday |
+| Wednesday | Tuesday |
+| Thursday | Wednesday |
+| Friday, Saturday | No report |
 
 ## Inputs
 - `../../run/connection.md`
+- `../../run/3a_fo.json` — the `as_of_date`. This is the date on the foreign ownership (FO) page.
 
 ## Process
 
-When a step below says to stop because something is wrong, the whole run stops. End the line in `../../run/issues.md` with "the run stopped", and skip straight to `stages/08_send-report/`. The one exception is step 3's "same date" case. Nothing is wrong there, so carry on to stage 07.
+If a step tells you to stop, the run stops. Add a line to `../../run/issues.md`. End the line with "the run stopped". Go to `stages/08_send-report/`.
 
-1. **Open the workbook** and start a session. Everything below happens inside it.
+1. **Find the day of the week.** Use today's date in Pakistan time.
 
-2. **Work out the report date.** Read down column A of `Mkt_Cap`, `FO_Actual` and `Diff_FOxMktCap` to the last row that has a date, on each sheet.
+   If today is Friday or Saturday, do not change the report date. Add this line to `../../run/issues.md`:
 
-   All three must show the same date. That is the report date. If they don't match, an earlier stage didn't finish: write nothing, add a line to `../../run/issues.md` saying what each sheet showed, and stop.
+   > No report: weekend run. The next report goes out on Sunday.
 
-3. **Find the report's date cell by following the links.** Every figure in `EMAIL.1` works from one date cell, currently E3. Rows and columns get added to this sheet, so don't go by where the cell sits. Follow the formulas to it instead:
+   Do not do stage 07. Go to `stages/08_send-report/`.
 
-   - Find the `Mkt Cap` column by its heading, and take the first company's figure in it.
-   - Read its formula. It looks the date up from a cell in row 1 of its column.
-   - Read that cell. It's a formula pointing at another cell. Keep following until you reach a cell holding a plain date, not a formula or text. That's the date cell.
-   - Do the same from the `Current FO` column. It must lead to the same cell.
+2. **Open the workbook.** Start a session. Do all steps below in this session.
 
-   If the trail doesn't end at a plain date (it ends at text, a blank cell or another sheet), or the two columns lead to different cells, the stage can't tell which cell drives the report. Write nothing, add a line to `../../run/issues.md` saying where the trail ended and what was there, and stop.
+3. **Get the new report date.** Read `as_of_date` from `../../run/3a_fo.json`. This date is the new report date.
 
-   Then compare the report date with the date in that cell:
+   If `as_of_date` is empty, stop. Log that the FO date is missing.
 
-   - **Report date is later** — carry on.
-   - **Same** — the report is already on that day. Nothing to write. Close the session and go on to stage 07.
-   - **Earlier** — something is wrong. Write nothing, add a line to `../../run/issues.md` saying what the cell held and what the report date was, and stop.
+4. **Find the date cell.** All figures in `EMAIL.1` use one date cell. Currently this cell is E3. Rows and columns can move. Thus, follow the formulas to find the cell:
 
-4. **Write the report date into that cell.**
+   - Find the `Mkt Cap` column by its heading. Read the formula of the first company in it.
+   - The formula uses a cell in row 1 of its column. Read that cell.
+   - That cell points to a different cell. Follow the links until you find a cell with a plain date. That cell is the date cell.
+   - Do the same from the `Current FO` column. It must go to the same cell.
 
-5. **Check it worked, before closing the session.**
+   If the links do not end at a plain date, or the two columns go to different cells, stop. Log where the links ended and what was in that cell.
 
-   - The date cell shows the report date, written as a date rather than a plain number.
-   - A few figures lower down in the `Mkt Cap` and `Current FO` columns show numbers, not errors. An error means one of the three sheets doesn't have that date.
+5. **Compare the new report date with the date cell.**
 
-6. **Close the session.**
+   - **New report date is later.** Go to step 6.
+   - **Same date.** There is no new trading day. That day was in the last report. The cause can be a market holiday, or the FO page did not update. Do not write. Add this line to `../../run/issues.md`:
+
+     > No report: no new trading day. The FO page shows 8 Oct 2026. This day was in the last report.
+
+     Close the session. Do not do stage 07. Go to `stages/08_send-report/`.
+   - **New report date is earlier.** Stop. Log the two dates.
+
+6. **Make sure that the new report date has a row.** Read column A of `Mkt_Cap`, `FO_Actual` and `Diff_FOxMktCap`. Each sheet must have a row with the new report date. If a sheet does not have this row, stop. Log the sheet name and the date.
+
+7. **Write the new report date** into the date cell.
+
+8. **Do a check before you close the session.**
+
+   - The date cell shows the new report date as a date, not as a number.
+   - Some figures in the `Mkt Cap` and `Current FO` columns show numbers, not errors. An error tells you that a sheet does not have the date.
+
+9. **Close the session.**
 
 ## Outputs
-- The `EMAIL.1` sheet, with the date cell set to the new day
-- `../../run/issues.md` — added to wherever a step above says to
+- The `EMAIL.1` sheet, with the new report date in the date cell
+- `../../run/issues.md` — a "No report:" line when no report goes out, or a line when the run stops
 
 ## Technical details
 
-**How the figures link to the date cell.** A figure in the `Mkt Cap` column currently looks like this:
+**Today's day of the week** — use Pakistan time (PKT). PKT is UTC+5 all year, with no daylight saving. Get the time in UTC and add 5 hours. Do not use the time zone of the server.
+
+**The FO date** — `as_of_date` has this format: `Oct 8, 2026`. Change it to a real date before you compare it.
+
+**How the figures link to the date cell.** A figure in the `Mkt Cap` column currently has this formula:
 
 ```
 =XLOOKUP($B7,Mkt_Cap!$B$2:$OH$2,INDEX(Mkt_Cap!$B$6:$OH$4999,XMATCH(E$1,Mkt_Cap!$A$6:$A$4999,0,-1),0),"")
 ```
 
-The date it uses is `E$1`: the cell matched against the dates in column A of `Mkt_Cap`. `E1` holds `=E3`, and `E3` holds the plain date. The addresses here are examples; follow whatever the formulas actually say.
+The formula uses `E$1`. `E1` holds `=E3`. `E3` holds the plain date. These addresses are examples. Follow the formulas in the sheet.
 
 Read formulas with `GET .../worksheets('EMAIL.1')/range(address='E7')?$select=formulas,values,valueTypes`. A plain date has a number in `formulas` (no `=`) and `valueTypes` of `Double`.
 
-**The date cell holds a plain date, not a formula** — an Excel date serial number, shown with the format `d.mmm.yy` (e.g. `16.Sep.26`).
+**The date cell holds a plain date, not a formula.** It is an Excel date serial number with the format `d.mmm.yy` (for example, `16.Sep.26`).
 
-**Writing the date cell** — write the serial number and set the format in the same request:
+**Writing the date cell** — write the serial number and the format in one request:
 
 ```
 PATCH .../worksheets('EMAIL.1')/range(address='E3')
 {
-  "values": [[46294]],
+  "values": [[46303]],
   "numberFormat": [["d.mmm.yy"]]
 }
 ```
 
-`46294` is 29 September 2026. To work out the number for a date, count the days since 30 December 1899. The dates in column A of the three sheets are already stored this way, so the report date can be copied across as it is.
+`46303` is 8 October 2026. To get the number for a date, count the days from 30 December 1899.
 
-**Why all three sheets need the date.** The `Mkt Cap` and `Current FO` columns look the report date up in `Mkt_Cap` and `FO_Actual` and need an exact match, or they show an error. The change columns add up values from `Diff_FOxMktCap` up to that date, so a missing day there gives a wrong number rather than an error. That's why step 2 checks all three.
+**Why all three sheets need the date.** The `Mkt Cap` and `Current FO` columns find the report date in `Mkt_Cap` and `FO_Actual`. They need an exact match. If there is no match, they show an error. The change columns add values from `Diff_FOxMktCap` up to the report date. If a day is missing there, the number is wrong but no error shows.
 
-**Leave the other dates in row 1 alone.** They're fixed year-end dates used for comparisons. They aren't part of the daily update.
+**Why the report date is not the last row.** Each run adds a row for every calendar day. Fridays, Saturdays and holidays get a copy of the last trading day. On Sunday, the last row is Saturday. But the FO page shows Thursday. The report must show Thursday.
 
-**The sheet recalculates by itself.** The workbook's calculation mode is automatic, so nothing needs triggering after the date cell changes. If a check in step 5 reads the old figures, read again.
+**Do not change the other dates in row 1.** They are fixed year-end dates for comparisons.
 
-**Session use:** open one session (`createSession`, `persistChanges: true`), do the reads and the write inside it, then close it. `closeSession` sends no body, but some HTTP clients need `Content-Length: 0` set explicitly, or it fails with `411 Length Required` instead of `204`.
+**The sheet calculates automatically.** If a check in step 8 shows old figures, read again.
 
-Requests can time out; try again rather than treating the first failure as final.
+**Session use:** open one session (`createSession`, `persistChanges: true`). Do the reads and the write in it. Then close it. `closeSession` sends no body. Some HTTP clients must set `Content-Length: 0`. If not, the result is `411 Length Required`, not `204`.
+
+Requests can time out. Try again. Do not think that the first failure is final.

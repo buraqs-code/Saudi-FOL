@@ -4,7 +4,7 @@ The Task: at the end of every run, send the right emails.
 
 - **A good run** sends two emails: the report, to the people who read it, and then a short "Run Succeeded" email, to whoever looks after the automation.
 - **A stopped run** sends only a "Run Stopped" email, to whoever looks after the automation. The report doesn't go out.
-- **A market closed day** sends only a "Market closed" email, to whoever looks after the automation. The report doesn't go out.
+- **A no-report run** sends only a "No report" email, to whoever looks after the automation. This occurs on Friday and Saturday, and when there is no new trading day. Stage 06 decides this.
 
 Every run ends here, including one that stopped early.
 
@@ -22,7 +22,9 @@ The "Run Stopped" email is the exception. The run may have stopped before the re
 
 1. **Did the run stop?** Read `issues.md`. If any line says the run stopped, it stopped. Go to step 5.
 
-   **Was the market closed?** If a line starts "Market closed:", go to step 7.
+   **Is it a no-report run?** If a line starts with "No report:", go to step 7.
+
+   A line that starts with "Market closed:" does not stop the report. It only tells you that a row was copied.
 
    If no line says that but either PDF is missing, the report can't be sent. Treat it as stopped, with "the report PDFs weren't made" as the issue.
 
@@ -91,22 +93,25 @@ The "Run Stopped" email is the exception. The run may have stopped before the re
      - Subject: `FOL: Run Succeeded, 2 issues to review - 30 Sep 2026` (or `1 issue`)
      - Body: the same line, then the issues table.
 
-7. **Market closed: send the "Market closed" email** to `email.status_recipients`. Then you're done. Take both dates from the "Market closed:" line in `issues.md`. The second date is the last open day.
+7. **No report: send the "No report" email** to `email.status_recipients`. Then stop.
 
-   - **Subject:** `FOL: Market closed - 2 Oct 2026`
-   - **Body, weekend** (Friday or Saturday):
+   - **Subject:** `FOL: No report - 10 Oct 2026`. Use today's date in Pakistan time.
+   - The examples below are for runs on Friday 9 Oct and Saturday 10 Oct. The date after "Sheets updated for" is the date of the row that this run added.
+   - **Body, weekend run** (the "No report:" line starts with "No report: weekend run"):
 
-     > Weekend, market closed on 2 Oct 2026. Values copied from 1 Oct 2026. Report not sent.
+     > Weekend run. Sheets updated for 9 Oct 2026. Report not sent. The next report goes out on Sunday.
 
-   - **Body, weekday:**
+   - **Body, no new trading day** (the "No report:" line starts with "No report: no new trading day"):
 
-     > Market closed on 6 Oct 2026, likely a holiday. Values copied from 5 Oct 2026. Report not sent. If the market was open, the website hadn't updated yet and that day's figures were missed.
+     > No new trading day. The FO page shows 8 Oct 2026. This day was in the last report. Sheets updated for 9 Oct 2026. Report not sent. Possible causes: a market holiday, or the FO page did not update.
 
-   - If `issues.md` has other lines, add the issues table below. Leave the "Market closed:" line out of it.
+   - If `issues.md` has other lines, add the issues table below.
 
 ### The issues table
 
 Two columns, **Issue** and **Likely fix**, one row for each line in `issues.md`.
+
+Do not include lines that start with "No report:" or "Market closed:". These lines are normal. Do not count them as issues in the "Run Succeeded" subject.
 
 - **Issue** — what happened, in plain words. Name the company, sheet or date involved.
 - **Likely fix** — what would most likely sort it out, in one or two lines. Use what you know about this project to make it specific, but write it for someone who doesn't code. Write just the fix
