@@ -39,7 +39,7 @@ email:
   sender: buraq@hilalinvest.com
 
   # People who read the report. They only ever get the report email.
-  report_recipients: [investmentteam@hilalinvest.com]
+  report_recipients: [buraq@hilalinvest.com]
 
   # Whoever looks after the automation. They get the "Run Stopped" / "Run Succeeded" emails.
-  status_recipients: [muhammad.asim@hilalinvest.com, moeenuddin.hashim@hilalinvest.com, buraq@hilalinvest.com]
+  status_recipients: [buraq@hilalinvest.com]
