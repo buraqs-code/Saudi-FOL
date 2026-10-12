@@ -42,4 +42,4 @@ email:
   report_recipients: [investmentteam@hilalinvest.com]
 
   # Whoever looks after the automation. They get the "Run Stopped" / "Run Succeeded" emails.
-  status_recipients: [buraq@hilalinvest.com, moeenuddin.hashim@hilalinvest.com, muhammad.asim@hilailnvest.com]
+  status_recipients: [buraq@hilalinvest.com, moeenuddin.hashim@hilalinvest.com, muhammad.asim@hilalinvest.com]
