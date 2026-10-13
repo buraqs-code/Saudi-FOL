@@ -16,10 +16,21 @@ workbook:
   # words anywhere in the filename rather than by matching the whole name.
   filename_contains: Saudi_FO_New
 
+# --------------------------------------------------------------------
+# The market flows workbook — a second, separate Excel file, used only by stage 08
+# Used by: stages/01_authentication (to find it), stages/08_market_flows
+# --------------------------------------------------------------------
+market_flows_workbook:
+
+  # It sits in the same OneDrive and the same folder as the workbook above.
+  # Found the same way, by these words anywhere in the filename
+  # (the file is currently called "New_Saudi Market Flows").
+  filename_contains: Saudi Market Flows
+
 
 # --------------------------------------------------------------------
 # The pages on the Saudi Exchange website the data comes from
-# Used by: stages/02_update_mkt_cap/2a_fetch-data, stages/03_update_FO/3a_fetch-data
+# Used by: stages/02_update_mkt_cap/2a_fetch-data, stages/03_update_FO/3a_fetch-data, stages/08_market_flows
 # --------------------------------------------------------------------
 sources:
 
@@ -29,9 +40,12 @@ sources:
 
   foreign_ownership: https://www.saudiexchange.sa/wps/portal/saudiexchange/newsandreports/reports-publications/foreign-ownership?locale=en
 
+  # The weekly market flows reports. Updated once a week, not daily.
+  market_flows: https://www.saudiexchange.sa/wps/portal/saudiexchange/newsandreports/reports-publications/annual-reports?locale=en
+
 # --------------------------------------------------------------------
 # Who the emails come from, and who gets them
-# Used by: stages/08_send-report
+# Used by: stages/09_send-report
 # --------------------------------------------------------------------
 email:
 

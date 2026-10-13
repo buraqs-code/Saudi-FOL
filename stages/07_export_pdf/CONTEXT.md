@@ -1,32 +1,36 @@
 # 07_export_pdf: turn the report into PDFs
 
-The Task: make two PDFs.
+The Task: make three PDFs.
 
-- **The report** — `EMAIL.1` and `EMAIL.CHARTS` together. This gets attached to the email.
+- **The table** — `EMAIL.1` only. This is attached to the email.
+- **The company charts** — `EMAIL.CHARTS` only. This is attached to the email as a second file.
 - **The email body** — `Email.0` and `EMAIL.2` together. Its pages become the pictures in the body of the email.
 
 The work is done on throwaway copies of the workbook, never on the workbook itself. Each PDF gets its own fresh copy. Don't make two PDFs from the same copy: OneDrive keeps handing back the first PDF it made from a file, even after the file changes.
 
 ## Inputs
 - `../../run/connection.md`
+- `../../run/3a_fo.json`: the `as_of_date`, which is the report date that stage 06 wrote
 
 ## Process
 
-If `../../run/issues.md` has a line that starts with "No report:", do not do this stage. Go to `stages/08_send-report/`.
+If `../../run/issues.md` has a line that starts with "No report:", do not do this stage. Go to `stages/09_send-report/`.
 
 1. **Note the report date.** Read the date cell in `EMAIL.1` of the real workbook that every figure works from (currently E3). Find it the way stage 06 does: take a figure in the `Mkt Cap` column and follow its date reference, through row 1, to the cell holding a plain date. This is read only. Step 3 uses it.
 
-   Stage 06 has only just changed this cell, so a read straight after can still show the old date. If it shows a date older than the last date in `Mkt_Cap`, wait 30 seconds and read again.
+   Stage 06 has only just changed this cell, so a read straight after can still show the old date. E3 must show the `as_of_date` in `../../run/3a_fo.json`. Stage 06 wrote this date. If E3 shows an older date, wait 30 seconds and read again. Do this for 2 minutes at most. If E3 still shows an older date, go to "If something fails".
 
 2. **Clear out any old copy.** Look in the workbook's folder for a file named `FOL_pdf_export_temp.xlsx`. If one is there, a past run didn't finish cleaning up. Delete it, and add a line to `../../run/issues.md` saying an old copy was found and deleted. If it says the file is locked, wait and try again (see "Technical details").
 
-3. **Make the report PDF**, following "Making one PDF" below with:
-   - sheets to keep visible: `EMAIL.1` and `EMAIL.CHARTS`
-   - save as: `../../run/7_report.pdf`
+3. **Make the table PDF**, following "Making one PDF" below with:
+   - sheet to keep visible: `EMAIL.1`
+   - save as: `../../run/7_table.pdf`
 
-   The sheets come out in tab order, so `EMAIL.1` comes first and the charts follow.
+4. **Make the company charts PDF**, following "Making one PDF" again, with a new copy:
+   - sheet to keep visible: `EMAIL.CHARTS`
+   - save as: `../../run/7_charts.pdf`
 
-4. **Make the email body PDF**, following "Making one PDF" again, with a new copy:
+5. **Make the email body PDF**, following "Making one PDF" again, with a new copy:
    - sheets to keep visible: `Email.0` and `EMAIL.2`
    - save as: `../../run/7_body.pdf`
 
@@ -38,12 +42,13 @@ a. **Make the copy.** Copy the workbook into the same folder, named `FOL_pdf_exp
 
 b. **Check the copy is up to date.** Read the date cell in the copy. It must show the date from step 1. A new copy often isn't ready to open for 20–30 seconds, so keep trying for about two minutes. If it shows an older date, delete the copy, wait a minute and go back to (a). Do this once. If it still doesn't match, go to "If something fails".
 
-c. **Hide every other sheet.** Open a session on the copy, hide every sheet except the two to keep, check those two are the only ones still visible, then close the session. Closing saves the change.
+c. **Hide every other sheet.** Open a session on the copy, hide every sheet except the ones to keep, check those are the only ones still visible, then close the session. Closing saves the change.
 
 d. **Ask for the copy as a PDF** and save it.
 
 e. **Check the PDF before deleting the copy.** It must be a real PDF with at least one page, and show the right sheets:
-   - **Report PDF:** has text from `EMAIL.1` (e.g. "SAR Mn"), and no text from `EMAIL.2` (e.g. "TOP 1-DAY FOREIGN BUYING"). For `EMAIL.CHARTS`, look at the last page: it must show the charts, drawn, not blank boxes. (Text alone can't prove the charts are there: the chart titles are company names, which also appear on `EMAIL.1`.)
+   - **Table PDF:** has text from `EMAIL.1` (e.g. "SAR Mn"), and no text from `EMAIL.2` (e.g. "TOP 1-DAY FOREIGN BUYING"). Look at the last page: it must show the table, not charts.
+   - **Company charts PDF:** has no text found only on `EMAIL.1` (e.g. "SAR Mn") or `EMAIL.2`. Look at the first and the last page: each must show charts, drawn, not blank boxes. (Text alone can't prove the charts are there: the chart titles are company names, which also appear on `EMAIL.1`.)
    - **Body PDF:** has text from `Email.0` (e.g. "TASI - EX ARAMCO") and from `EMAIL.2`, and no text found only on `EMAIL.1` (e.g. "SAR Mn") or `EMAIL.CHARTS`.
 
    If it's wrong, wait 30 seconds and ask for the PDF again, up to 3 times. If it's still wrong, go to "If something fails". Note how many pages it has.
@@ -52,10 +57,11 @@ f. **Delete the copy.** Do this every time, even if a step above failed. Close a
 
 ### If something fails
 
-If either PDF can't be made, the whole run stops. Add a line to `../../run/issues.md` saying which step failed and what came back, ending with "the run stopped". Still delete the copy (step f). Then go on to `stages/08_send-report/`, so the issue still gets sent.
+If any of the three PDFs can't be made, the whole run stops. Add a line to `../../run/issues.md` saying which step failed and what came back, ending with "the run stopped". Still delete the copy (step f). Then go on to `stages/09_send-report/`, so the issue still gets sent.
 
 ## Outputs
-- `../../run/7_report.pdf` — the report, `EMAIL.1` then `EMAIL.CHARTS`
+- `../../run/7_table.pdf` — the table, `EMAIL.1`
+- `../../run/7_charts.pdf` — the company charts, `EMAIL.CHARTS`
 - `../../run/7_body.pdf` — `Email.0` then `EMAIL.2`, for the pictures in the email body
 - `../../run/issues.md` — added to if something fails, or if an old copy was found and deleted
 - The real workbook is not changed. No copy is left behind in the folder.
@@ -103,9 +109,9 @@ Get the list of sheets from `GET .../workbook/worksheets?$select=name,visibility
 GET /v1.0/drives/{driveId}/items/{copyId}/content?format=pdf
 ```
 
-The reply is a `302` redirect to the PDF itself. Follow it to download, without the `Authorization` header. Asked for straight after closing a session, it can come back `406` at first. Wait a few seconds and ask again. Both PDFs are made with this same request, each on its own copy.
+The reply is a `302` redirect to the PDF itself. Follow it to download, without the `Authorization` header. Asked for straight after closing a session, it can come back `406` at first. Wait a few seconds and ask again. All three PDFs are made with this same request, each on its own copy.
 
-**This request is slow.** `EMAIL.CHARTS` has about 76 charts, so the report PDF can take over a minute. Allow up to 4 minutes per request. A timeout is normal. Ask again, don't treat it as a failure.
+**This request is slow.** `EMAIL.CHARTS` has about 76 charts, so the company charts PDF can take over a minute. Allow up to 4 minutes per request. A timeout is normal. Ask again, don't treat it as a failure.
 
 **Always close the session** — even if a step fails. A session left open locks the copy.
 
@@ -113,7 +119,7 @@ The reply is a `302` redirect to the PDF itself. Follow it to download, without 
 
 **Sheet names** — `Email.0` is currently written with a lowercase "mail", unlike `EMAIL.1`, `EMAIL.2` and `EMAIL.CHARTS`. Use each name exactly as the sheet list gives it.
 
-**Checking it's a PDF** — the file starts with `%PDF`. Count the pages with `pypdfium2`, the same library stage 08 uses. Install it if it isn't there.
+**Checking it's a PDF** — the file starts with `%PDF`. Count the pages with `pypdfium2`, the same library stage 09 uses. Install it if it isn't there.
 
 **Deleting the copy** — `DELETE /v1.0/drives/{driveId}/items/{copyId}`. It goes to the OneDrive recycle bin, which is fine.
 

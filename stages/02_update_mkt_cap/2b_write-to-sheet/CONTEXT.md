@@ -30,7 +30,7 @@ The Task: convert the fetched market cap figures to millions, then write today's
 7. **Was the market open?** First check the fetch worked:
    - **Not everything was fetched** (`run/2a_mkt_cap.json` missing or empty, or TASI or NOMU missing from `pages_fetched`):
      - **Friday or Saturday** — the market is closed anyway. Copy the row above and log it as "Market closed:" (see below).
-     - **Any other day** — stop. Write nothing. Add a line to `../../../run/issues.md` saying which page failed and why (e.g. "blocked: 403 Access Denied"). End it with "the run stopped", and skip straight to `stages/08_send-report/`.
+     - **Any other day** — stop. Write nothing. Add a line to `../../../run/issues.md` saying which page failed and why (e.g. "blocked: 403 Access Denied"). End it with "the run stopped", and skip straight to `stages/09_send-report/`.
 
    Otherwise, compare `market_date` (from the JSON) with the row date:
    - **Same date** — the market was open. Write the fetched figures.

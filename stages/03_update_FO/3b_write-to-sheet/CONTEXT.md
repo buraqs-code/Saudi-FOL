@@ -25,7 +25,7 @@ The Task: write today's data into `FO_Actual`, using the figures `3a_fetch-data`
    - **Market closed** (`issues.md` has a line starting "Market closed:") — copy the row above. Stage 2b already logged it.
    - **Nothing fetched** (`run/3a_fo.json` has `"as_of_date": null` or an empty `companies` list) — stop. Write nothing to this sheet.
      - Stage 2b has already added the row date to `Mkt_Cap`. Remove that row, so the two sheets stay on the same day: if `Mkt_Cap`'s last date is the row date and `FO_Actual` doesn't have that date, clear that whole row in `Mkt_Cap` (date and figures). See "Technical details".
-     - Add a line to `../../../run/issues.md` saying the FO page failed and why (e.g. "blocked: 403 Access Denied"). End it with "the run stopped", and skip straight to `stages/08_send-report/`.
+     - Add a line to `../../../run/issues.md` saying the FO page failed and why (e.g. "blocked: 403 Access Denied"). End it with "the run stopped", and skip straight to `stages/09_send-report/`.
    - **`as_of_date` is the same as the row date** — write the fetched figures.
    - **`as_of_date` is older** — the FO page is behind. It sometimes updates later than the market cap pages. Copy the row above. Add a line to `../../../run/issues.md` starting **"FO page behind:"**, giving the date the FO page showed and the row date.
    - **`as_of_date` is newer** — this shouldn't happen. Write nothing, not even the date. Log both dates in `../../../run/issues.md` and skip the rest of this stage.

@@ -1,4 +1,4 @@
-# 08_send-report: send the emails
+# 09_send-report: send the emails
 
 The Task: at the end of every run, send the right emails.
 
@@ -12,7 +12,8 @@ Every run ends here, including one that stopped early.
 - `../../config.yaml` — the `email` section: who sends, and who gets which email
 - `../../run/connection.md` — to read the report date from the workbook
 - `../../run/issues.md` — may not exist. If it doesn't, there were no issues.
-- `../../run/7_report.pdf`, `../../run/7_body.pdf` — only there on a good run
+- `../../run/7_table.pdf`, `../../run/7_charts.pdf`, `../../run/7_body.pdf` — only there on a good run
+- `../../run/8e_graphs.pdf` — the market flows charts. Only there if stage 08 ran and its step 8e worked
 
 ## Process
 
@@ -26,14 +27,14 @@ The "Run Stopped" email is the exception. The run may have stopped before the re
 
    A line that starts with "Market closed:" does not stop the report. It only tells you that a row was copied.
 
-   If no line says that but either PDF is missing, the report can't be sent. Treat it as stopped, with "the report PDFs weren't made" as the issue.
+   If no line says that but `7_table.pdf`, `7_charts.pdf` or `7_body.pdf` is missing, the report can't be sent. Treat it as stopped, with "the report PDFs weren't made" as the issue.
 
 2. **Read the report date** from `EMAIL.1` (read only).
 
 3. **Send the report email** to `email.report_recipients`.
 
    - **Subject:** `Saudi Foreign Ownership - 30 Sep 2026`
-   - **Body:** a greeting and one line, then two pictures, `Email.0` first and `EMAIL.2` second, then the sign-off:
+   - **Body:** a greeting and one line, then two pictures, `Email.0` first and `EMAIL.2` second, then the market flows charts, then the sign-off:
 
      > Dear Team, 
      > Please find the top foreign buying and selling on the Saudi Exchange for 30 Sep 2026. The full report is attached.
@@ -41,6 +42,8 @@ The "Run Stopped" email is the exception. The run may have stopped before the re
      > *[picture of Email.0]*
      >
      > *[picture of EMAIL.2]*
+     >
+     > *[pictures of the market flows charts]*
      >
      > Regards,
      > Buraq
@@ -53,7 +56,9 @@ The "Run Stopped" email is the exception. The run may have stopped before the re
 
      On these days the 1-day tables in the `EMAIL.2` picture show filler rows (e.g. "TASI" with `#N/A`, or one company repeated with "-"), because no company's FO changed. That's expected. Don't treat it as a wrong picture in the check below.
 
-   - **Attached:** `7_report.pdf` (`EMAIL.1` followed by `EMAIL.CHARTS`), renamed to `Saudi Foreign Ownership 30 Sep 2026.pdf`
+   - **Attached:** two files.
+     - `7_table.pdf` (`EMAIL.1`), renamed to `Saudi FO-30 Sep 2026.pdf`
+     - `7_charts.pdf` (`EMAIL.CHARTS`), renamed to `Saudi-FO-Charts-30 Sep 2026.pdf`
 
    The pictures are made from `7_body.pdf`: each page becomes one image, in the PDF's order, which puts `Email.0` first. Trim the white margins around each.
 
@@ -68,6 +73,12 @@ The "Run Stopped" email is the exception. The run may have stopped before the re
    If a picture fails, redo the cutting for that page and look again. If it still fails after one more try:
    - **Part of the table is missing, or the picture is blank:** don't send the report. Add a line to `issues.md` saying which picture was wrong and how, ending with "the run stopped". Then go to step 5.
    - **Only the spacing is off** (the table is all there but has extra white around it): send the report anyway. Add a line to `issues.md` saying which picture had extra white around it.
+
+   **The market flows charts.** If `8e_graphs.pdf` is there, make one picture from each of its pages, in order, the same way. The monthly charts come first, then the weekly charts. Put them after the `EMAIL.2` picture, with no heading. Look at each one: the charts must be drawn, nothing cut off, and not blank.
+
+   These pictures never stop the report. If one still fails after one more try, leave out **all** the market flows pictures, not only the bad one. Add a line to `issues.md` that starts with "Market flows:" and says which picture was wrong. Send the report without them.
+
+   If `8e_graphs.pdf` is not there, send the report without the charts. Stage 08 has already logged the reason, or it did not run.
 
 4. **If the report email fails to send,** the run counts as stopped after all. Add a line to `issues.md` saying the report email couldn't be sent and what came back, ending with "the run stopped". Then go to step 5.
 
@@ -92,6 +103,7 @@ The "Run Stopped" email is the exception. The run may have stopped before the re
    - **Some issues:**
      - Subject: `FOL: Run Succeeded, 2 issues to review - 30 Sep 2026` (or `1 issue`)
      - Body: the same line, then the issues table.
+   - **Market flows updated:** if `issues.md` has lines that start with "Market flows updated:", put each one in the body, under the first line, as written. For example: "Market flows updated: the weekly charts now go to 8 Oct 2026." These lines are not issues. On a day with no new report, there is no such line, and the email says nothing about market flows.
 
 7. **No report: send the "No report" email** to `email.status_recipients`. Then stop.
 
@@ -111,7 +123,7 @@ The "Run Stopped" email is the exception. The run may have stopped before the re
 
 Two columns, **Issue** and **Likely fix**, one row for each line in `issues.md`.
 
-Do not include lines that start with "No report:" or "Market closed:". These lines are normal. Do not count them as issues in the "Run Succeeded" subject.
+Do not include lines that start with "No report:", "Market closed:" or "Market flows updated:". These lines are normal. Do not count them as issues in the "Run Succeeded" subject. Lines that start with "Market flows:" are issues. Include them.
 
 - **Issue** — what happened, in plain words. Name the company, sheet or date involved.
 - **Likely fix** — what would most likely sort it out, in one or two lines. Use what you know about this project to make it specific, but write it for someone who doesn't code. Write just the fix
@@ -170,17 +182,17 @@ A reply of `202` means it was accepted for sending. Anything else means it faile
 }
 ```
 
-and in the body: `<img src="cid:body_1" width="700">`. Number them by page, `body_1`, `body_2` and so on, and put them in the body in that order.
+and in the body: `<img src="cid:body_1" width="700">`. Number them by page, `body_1`, `body_2` and so on, and put them in the body in that order. The market flows pictures carry on the numbering after the `7_body.pdf` pictures, e.g. `body_3`, `body_4`.
 
 **Turning the PDF into a picture** — render each page with a PDF library, e.g. `pypdfium2`, at about twice normal size (`scale=2`) so it stays sharp. Then cut off the white margins.
 
 **Picture width** — give every `<img>` the same fixed `width="700"`, no matter how wide the image itself is. Don't size each one from its own pixel width, such as "half the real width". The pages trim to different widths, so the pictures would come out at different sizes in the email. Set only `width`, not `height`, so each picture keeps its shape.
 
-**The PDF attachment** — the same as the picture, but `"contentType": "application/pdf"`, `"isInline": false`, and no `contentId`.
+**The PDF attachments** — each the same as the picture, but `"contentType": "application/pdf"`, `"isInline": false`, and no `contentId`.
 
 **The issues table** — a plain HTML `<table>`, with borders and padding written on each cell (`style="border:1px solid #ccc; padding:6px"`). Outlook ignores most other styling, but this much it keeps.
 
-**Size** — one `sendMail` request can be about 4 MB at most, attachments included. Base64 makes files about a third bigger. The report PDF (now with the `EMAIL.CHARTS` pages) plus the two pictures should still be well within it. If a send fails because it's too large, log that as the issue.
+**Size** — one `sendMail` request can be about 4 MB at most, attachments included. Base64 makes files about a third bigger. The two attached PDFs, the two pictures and the market flows pictures should still be within it. If a send fails because it is too large, send it again without the market flows pictures, and log a "Market flows:" line saying so. If a send fails because it's too large, log that as the issue.
 
 **Today's date** — use Pakistan time (PKT), not the server's clock, which may be on a different day. PKT is UTC+5 all year, with no daylight saving, so take the time in UTC and add 5 hours. Don't rely on the server's time-zone settings to do this.
 

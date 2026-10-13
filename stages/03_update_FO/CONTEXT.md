@@ -1,6 +1,6 @@
 # 03_update_FO: fetch foreign ownership data and write it into the workbook
 
-This stage reads foreign ownership figures for every company off the Saudi Exchange's Foreign Ownership page and writes them into the workbook's `FO_Actual` and `FO_Max` sheets.
+This stage reads foreign ownership figures for every company off the Saudi Exchange's Foreign Ownership page and writes them into the workbook's `FO_Actual` sheet.
 
 ## The steps
 

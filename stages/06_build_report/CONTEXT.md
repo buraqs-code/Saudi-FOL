@@ -19,7 +19,7 @@ The report goes out Sunday to Thursday. Each report shows the previous trading d
 
 ## Process
 
-If a step tells you to stop, the run stops. Add a line to `../../run/issues.md`. End the line with "the run stopped". Go to `stages/08_send-report/`.
+If a step tells you to stop, the run stops. Add a line to `../../run/issues.md`. End the line with "the run stopped". Go to `stages/09_send-report/`.
 
 1. **Find the day of the week.** Use today's date in Pakistan time.
 
@@ -27,7 +27,7 @@ If a step tells you to stop, the run stops. Add a line to `../../run/issues.md`.
 
    > No report: weekend run. The next report goes out on Sunday.
 
-   Do not do stage 07. Go to `stages/08_send-report/`.
+   Do not do stage 07. Go to `stages/09_send-report/`.
 
 2. **Open the workbook.** Start a session. Do all steps below in this session.
 
@@ -51,7 +51,7 @@ If a step tells you to stop, the run stops. Add a line to `../../run/issues.md`.
 
      > No report: no new trading day. The FO page shows 8 Oct 2026. This day was in the last report.
 
-     Close the session. Do not do stage 07. Go to `stages/08_send-report/`.
+     Close the session. Do not do stage 07. Go to `stages/09_send-report/`.
    - **New report date is earlier.** Stop. Log the two dates.
 
 6. **Make sure that the new report date has a row.** Read column A of `Mkt_Cap`, `FO_Actual` and `Diff_FOxMktCap`. Each sheet must have a row with the new report date. If a sheet does not have this row, stop. Log the sheet name and the date.

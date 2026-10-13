@@ -13,11 +13,11 @@ The Task: fetch TASI and NOMU market cap data from the Saudi Exchange website an
 
 3. **Find the right table:** The page has several tables. The table we're looking for contains an extensive list of the companies along with their Symbol (Numeric Tadawul Code), Company Names, and their Market Cap in SAR. The table has other columns too that we're not concerned with.
 
-   Symbol, Company, and Market Cap(SAR) aren't next to each other in the table. Other columns do sit in between
+   Symbol, Company and Market Cap aren't next to each other in the table. Other columns sit in between. The header words can change a little, for example `Market Cap(SAR)` or `Market Cap (SAR)`. Use your judgement to find the three columns by their meaning.
 
    Keep the market cap exactly as the page shows it, with no rounding, but save it as a plain number: `825,000,000.00` becomes `825000000.00`.
 
-   **If no table matches, or more than one does:** This means that the site's layout has changed in a way these instructions don't account for. Don't guess. Treat it the same as a fetch failure (step 6): diagnose first, then log it and continue.
+   **If no table has these three columns, or more than one table has them:** the site's layout has changed. Do not choose a table at random. A wrong table gives a wrong market cap for every company. Treat it the same as a fetch failure (step 6): diagnose first, then log it and continue.
 
 4. **Do the same for the NOMU page**. The link is given as `sources.market_cap.nomu` in the config. Same table, same three columns, same market-date location.
 
@@ -35,7 +35,7 @@ The Task: fetch TASI and NOMU market cap data from the Saudi Exchange website an
 - Try `impersonate="safari184"` first.
 - If that fails, retry with `impersonate="firefox133"`.
 
-**The company table** is identified by its header row, not its heading. Its header row currently reads: `Symbol, Company, Open(SAR), High(SAR), Low(SAR), Close(SAR), % Change, Volume Traded, Value Traded(SAR), No. of Trades, Market Cap(SAR)`. May change in the future.
+**The company table** is identified by its header row, not its heading. An example of its header row (the words and spaces can change): `Symbol, Company, Open (SAR), High (SAR), Low (SAR), Close (SAR), % Change, Volume Traded, Value Traded (SAR), No. of Trades, Market Cap (SAR)`.
 
 **The JSON shape example:**
 ```json

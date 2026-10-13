@@ -11,13 +11,13 @@ The Task: fetch foreign ownership data from the Saudi Exchange website, convert 
 
 2. **Read the last updated date.** It's shown after the label "Last updated on", e.g. `Sep 30, 2026 3:00:00 AM`. Only the date matters here, so drop the time: `Sep 30, 2026`.
 
-3. **Find the right table by its headers.** Currently there's only one table on the page, but the site may move things around in the future. Find the correct table the same way as the market cap pages: the table whose header row contains text like: **Symbol**, **Company** and **Total Foreign Ownership Actual**. Read those four columns by matching header text, not position. Ignore **Foreign Strategic Investors Ownership** and **Total Foreign Ownership Maxiumum Limit** entirely. We dont need them. 
+3. **Find the right table by its headers.** Currently there's only one table on the page, but the site may move things around in the future. Find the correct table the same way as the market cap pages: the table whose header row contains text like: **Symbol**, **Company** and **Total Foreign Ownership Actual**. Read those three columns by their headers, not their position. Ignore **Foreign Strategic Investors Ownership** and **Total Foreign Ownership Maxiumum Limit** entirely. We dont need them. 
 
    Each percentage cell reads like `"20.0%"` — strip the `%` to get the plain number (`20.0`), then also divide by 100 to get the decimal value the sheet actually stores (`0.20`). Keep both the plain number / percentage and the decimal in the JSON
 
-   The exact header wording could change slightly. In that case use judgment to recognize the same four columns by meaning, not just an exact text match. Only treat it as "no table matches" if it's genuinely unclear which column is which.
+   The header words can change a little. Use your judgement to find the three columns by their meaning.
 
-   **If no table matches, or more than one does:** This means the site's layout has changed in a way these instructions don't account for. Don't guess. Diagnose first, then log it and continue (see step 5).
+   **If no table has these three columns, or more than one table has them:** the site's layout has changed. Do not choose a table at random. Diagnose first, then log it and continue (see step 5).
 
 4. **Write one JSON file** — the date, then every row in the order the table lists them no need to split or reorder anything. See "Technical details" for the exact format.
 

@@ -20,7 +20,7 @@ All three sheets are laid out the same way: one company per column, currently st
 
 The formulas depend on that staying true. Steps 2 and 3 check it before anything is written, and step 4 checks there is data to work with. **If any of those checks fails, write nothing, add a line to `../../run/issues.md` saying what was wrong, and stop.**
 
-Whenever this stage stops, the whole run stops. End the line in `issues.md` with "the run stopped", and skip straight to `stages/08_send-report/`.
+Whenever this stage stops, the whole run stops. End the line in `issues.md` with "the run stopped", and skip straight to `stages/09_send-report/`.
 
 1. **Open the workbook** and start a session. Everything below happens inside it.
 
@@ -135,7 +135,7 @@ PATCH .../worksheets('FOxMktCap')/range(address='A3888')
 
 **Session use:** open one session (`createSession`, `persistChanges: true`), do the reads and both writes inside it, then close it. `closeSession` sends no body, but some HTTP clients need `Content-Length: 0` set explicitly, or it fails with `411 Length Required` instead of `204`.
 
-**Turning formulas into numbers** (step 8) — read the rows with `?$select=formulas,values,valueTypes`. A row has formulas if any company cell's formula starts with `=`. Start at the fifth row from the bottom and go up until you reach a row with no formulas. Then write each of those rows' `values` back:
+**Turning formulas into numbers** (step 8) — read the rows with `?$select=formulas,values,valueTypes`. A row has formulas if any company cell's formula starts with `=`. The new row is the bottom row. Keep formulas in the new row and the 3 rows above it. Start at the row above those 4, and go up until you reach a row with no formulas. For example, if the new row is 3888, keep 3885–3888, and start at 3884. Then write each of those rows' `values` back:
 
 ```
 PATCH .../worksheets('FOxMktCap')/range(address='B3884:OH3884')
