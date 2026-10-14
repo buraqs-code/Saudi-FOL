@@ -6,8 +6,6 @@ Each stage is a folder containing a `CONTEXT.md` file that describes exactly wha
 
 The folders carry the order things happen in, the nesting carries the context, and the files carry the current state. **If something needs explaining, the explanation belongs in that folder's `CONTEXT.md`.**
 
-**Stages 01–07 and 09 are settled. Stage 08 (market flows) is still being designed.** Follow each stage's `CONTEXT.md` as written.
-
 ## Where things are
 
 | File or folder | What's in it |
