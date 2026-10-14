@@ -8,8 +8,6 @@
 
 **Read as you go, not all at once.** Read this file and `GLOSSARY.md` once, at the start. After that, read one stage's `CONTEXT.md` at a time — only the one you're currently on.
 
-**Status:** stages 01–07 and 09 are settled. Follow their `CONTEXT.md` as written. Stage 08 (market flows) is still being designed: follow what its `CONTEXT.md` says so far.
-
 ## Settings — `config.yaml`
 
 Three things live in `config.yaml` at the top level: where the workbooks are (whose OneDrive, which folder, how each one's name is recognised — the main workbook and the market flows workbook), the web addresses the data is fetched from, and who the report goes to. If one of those needs changing, change it there rather than in a stage's instructions.
