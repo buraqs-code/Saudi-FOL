@@ -13,7 +13,7 @@ Every run ends here, including one that stopped early.
 - `../../run/connection.md` — to read the report date from the workbook
 - `../../run/issues.md` — may not exist. If it doesn't, there were no issues.
 - `../../run/7_table.pdf`, `../../run/7_charts.pdf`, `../../run/7_body.pdf` — only there on a good run
-- `../../run/8e_graphs.pdf` — the market flows charts. Only there if stage 08 ran and its step 8e worked
+- `../../run/8e_charts/` — the market flows charts, one picture each. Or `../../run/8e_graphs.pdf`, if step 8e used its fallback. Only there if stage 08 ran and its step 8e worked
 
 ## Process
 
@@ -74,11 +74,15 @@ The "Run Stopped" email is the exception. The run may have stopped before the re
    - **Part of the table is missing, or the picture is blank:** don't send the report. Add a line to `issues.md` saying which picture was wrong and how, ending with "the run stopped". Then go to step 5.
    - **Only the spacing is off** (the table is all there but has extra white around it): send the report anyway. Add a line to `issues.md` saying which picture had extra white around it.
 
-   **The market flows charts.** If `8e_graphs.pdf` is there, make one picture from each of its pages, in order, the same way. The monthly charts come first, then the weekly charts. Put them after the `EMAIL.2` picture, with no heading. Look at each one: the charts must be drawn, nothing cut off, and not blank.
+   **The market flows charts.** Put them after the `EMAIL.2` picture, with no heading, in order. The monthly charts come first, then the weekly charts.
+   - **If `8e_charts/` is there,** use its pictures as they are, in file order (`01.png`, `02.png`, …). Do not cut them.
+   - **If only `8e_graphs.pdf` is there,** make one picture from each of its pages, in order, the same way as `7_body.pdf`.
+
+   Look at each one: the charts must be drawn, nothing cut off, and not blank.
 
    These pictures never stop the report. If one still fails after one more try, leave out **all** the market flows pictures, not only the bad one. Add a line to `issues.md` that starts with "Market flows:" and says which picture was wrong. Send the report without them.
 
-   If `8e_graphs.pdf` is not there, send the report without the charts. Stage 08 has already logged the reason, or it did not run.
+   If neither is there, send the report without the charts. Stage 08 has already logged the reason, or it did not run.
 
 4. **If the report email fails to send,** the run counts as stopped after all. Add a line to `issues.md` saying the report email couldn't be sent and what came back, ending with "the run stopped". Then go to step 5.
 
@@ -183,6 +187,8 @@ A reply of `202` means it was accepted for sending. Anything else means it faile
 ```
 
 and in the body: `<img src="cid:body_1" width="700">`. Number them by page, `body_1`, `body_2` and so on, and put them in the body in that order. The market flows pictures carry on the numbering after the `7_body.pdf` pictures, e.g. `body_3`, `body_4`.
+
+**The `8e_charts/` pictures** are PNGs, about 1400 pixels wide. Attach each one as it is, with `"contentType": "image/png"`. Show it at `width="700"`, the same as the other pictures.
 
 **Turning the PDF into a picture** — render each page with a PDF library, e.g. `pypdfium2`, at about twice normal size (`scale=2`) so it stays sharp. Then cut off the white margins.
 

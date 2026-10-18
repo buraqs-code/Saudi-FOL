@@ -24,7 +24,7 @@ This stage is split into steps. Each one has its own folder and its own instruct
 | `8b_download-reports/` | Download only the reports that are newer | only if one is new |
 | `8c_weekly/` | Write the new weekly report into the `W.` sheets, then update the weekly charts. Split into 8c1–8c3, see its own `CONTEXT.md` | only if the weekly is new |
 | `8d_monthly/` | Write the new monthly report into the `M.` sheets, then check the monthly charts. Split into 8d1–8d3, the same as 8c, see its own `CONTEXT.md` | only if the monthly is new |
-| `8e_export-graphs/` | Make one PDF of `W.Email` and `M.Email` from a throwaway copy, for the email. Uses the charts as they are | every time, even when nothing was new |
+| `8e_export-graphs/` | Get each chart on `M.Email` and `W.Email` as a picture, for the email. If that fails, make one PDF of the two sheets from a throwaway copy. Uses the charts as they are | every time, even when nothing was new |
 
 When both reports are new, do 8c, then 8d, in the same run.
 

@@ -37,7 +37,7 @@ Some files aren't owned by any single stage: one stage writes them and a later s
 - `run/7_table.pdf`, `run/7_charts.pdf`, `run/7_body.pdf` — the table (`EMAIL.1`) and the company charts (`EMAIL.CHARTS`) as two PDFs, and `Email.0` with `EMAIL.2` for the pictures in the email body. Written by `stages/07_export_pdf/`, read by `stages/09_send-report/`.
 - `run/8a_check.json`, `run/8b_weekly.pdf`, `run/8b_monthly.pdf` — whether the site has a newer weekly or monthly market flows report, and the PDFs of any that are. See `stages/08_market_flows/8a_check-for-new-reports/` and `8b_download-reports/`.
 - `run/8c1_weekly.json`, `run/8d1_monthly.json` — the figures read from the new weekly or monthly report. See `stages/08_market_flows/8c_weekly/8c1_read-report/` and `8d_monthly/8d1_read-report/`.
-- `run/8e_graphs.pdf` — the `W.Email` and `M.Email` charts, for the email. Written by `stages/08_market_flows/8e_export-graphs/`, read by `stages/09_send-report/`.
+- `run/8e_charts/` — the `M.Email` and `W.Email` charts, one picture each, for the email. Or `run/8e_graphs.pdf`, if 8e used its fallback. Written by `stages/08_market_flows/8e_export-graphs/`, read by `stages/09_send-report/`.
 - **`run/issues.md`** — a running list of anything a person needs to see after the run: failures, ambiguous cases, anything worth attention. Any stage adds to it. A stage that stops the run ends its line with "the run stopped". `stages/09_send-report/` reads it to decide which emails to send. A line that starts with "No report:" tells stages 07, 08 and 09 that no report goes out.
 
 `run/` doesn't exist in a fresh copy of the project — whichever stage writes to it first creates it.
