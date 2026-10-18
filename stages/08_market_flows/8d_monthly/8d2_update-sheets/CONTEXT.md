@@ -111,7 +111,7 @@ If a label does not agree, someone moved a row or a column. The column would cop
 3. Write the same `formulasR1C1` and `numberFormat` arrays to row `N+1` with `PATCH .../range(address='A{N+1}:{last column}{N+1}')`. Do not edit the formula strings. Replace a typed date (an entry that does not start with `=`) with the report date.
 4. The reply's `address` must end in row `N+1`.
 
-The full process is in `copy-row-down-process.md`, at the top of the project.
+The full process is in `copying-formulas-down.md`, at the top of the project.
 
 **Freezing a row.** Read the row's `values`. Write them back to the same range with `PATCH` and the body `{"values": [[...]]}`.
 

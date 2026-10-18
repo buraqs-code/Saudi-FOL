@@ -13,6 +13,7 @@ The folders carry the order things happen in, the nesting carries the context, a
 | `GLOSSARY.md` | recurring terms — the site, the workbook, how access works. Start here if you're new |
 | `CONTEXT.md` | what this automation does, stage by stage |
 | `config.yaml` | the settings — where the workbook is, where the data comes from, who gets the report |
+| `copying-formulas-down.md` | how to add a row by copying the row above, through Graph. Used by stage 08 |
 | `stages/` | the stages themselves, in the order they run |
 | `run/` | files one stage writes and a later stage reads, within the same run — doesn't exist in a fresh copy |
 

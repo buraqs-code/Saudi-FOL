@@ -14,7 +14,7 @@ Do the steps in this order. Each step has its own folder.
 |---|---|---|
 | `8c1_read-report/` | Read the two Main Market tables from the PDF into JSON. Check them. Does not change the workbook | Tested on the 1 Oct report |
 | `8c2_update-sheets/` | Add a row for the new week to the history, summary and email sheets. Freeze the old history rows. Write the `.dl` sheets. Write the date last | Written. Not run yet. Only its checks and the `.dl` write have been tried |
-| `8c3_check-charts/` | Check that the four charts on `W.Email` show the new row. They follow the data by themselves. Does not change anything | Written. Not run yet |
+| `8c3_check-charts/` | Check that the four weekly charts on `W.Email` show the new row, and that the YTD column shows the newest year. The charts follow the data by themselves. Does not change anything | Written. Not run yet |
 
 Step 8c1 only reads. If it fails, the workbook is not changed. Step 8c3 only checks the charts. Step 8e exports them, on every run.
 
