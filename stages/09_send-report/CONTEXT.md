@@ -190,7 +190,7 @@ and in the body: `<img src="cid:body_1" width="700">`. Number them by page, `bod
 
 **The `8e_charts/` pictures** are PNGs, about 1400 pixels wide. Attach each one as it is, with `"contentType": "image/png"`. Show it at `width="700"`, the same as the other pictures.
 
-**Turning the PDF into a picture** — render each page with a PDF library, e.g. `pypdfium2`, at four times normal size (`scale=4`) so it stays sharp. Then cut off the white margins. Then reduce the picture to 64 colours, to keep the file small: with PIL, `image.convert("RGB").quantize(colors=64)`, saved as PNG with `optimize=True`. The tables use only a few colours, so this does not change how they look. It does not change the size shown in the email. That is set by `width`.
+**Turning the PDF into a picture** — render each page with a PDF library, e.g. `pypdfium2`, at about twice normal size (`scale=2`) so it stays sharp. Then cut off the white margins.
 
 **Picture width** — give every `<img>` the same fixed `width="700"`, no matter how wide the image itself is. Don't size each one from its own pixel width, such as "half the real width". The pages trim to different widths, so the pictures would come out at different sizes in the email. Set only `width`, not `height`, so each picture keeps its shape.
 
