@@ -9,7 +9,7 @@ The Task: at the end of every run, send the right emails.
 Every run ends here, including one that stopped early.
 
 ## Inputs
-- `../../config.yaml` — the `email` section: who sends, and who gets which email
+- `../../config.yaml` — the `email` section: who sends, and who gets which email. `pdf_folder`: where the report PDFs are saved
 - `../../run/connection.md` — to read the report date from the workbook
 - `../../run/issues.md` — may not exist. If it doesn't, there were no issues.
 - `../../run/7_table.pdf`, `../../run/7_charts.pdf`, `../../run/7_body.pdf` — only there on a good run
@@ -86,7 +86,13 @@ The "Run Stopped" email is the exception. The run may have stopped before the re
 
 4. **If the report email fails to send,** the run counts as stopped after all. Add a line to `issues.md` saying the report email couldn't be sent and what came back, ending with "the run stopped". Then go to step 5.
 
-   If it sent, go to step 6.
+   If it sent, save the PDFs (below), then go to step 6.
+
+   **Save the PDFs to OneDrive.** Upload the two attached PDFs to the folder in `pdf_folder` in the config. Use the report date in the name:
+   - `7_table.pdf` as `Saudi FO - 30 Sep 2026.pdf`
+   - `7_charts.pdf` as `Saudi FO Charts - 30 Sep 2026.pdf`
+
+   If a file with that name is already there, replace it. If an upload fails, try again. If it still fails, add a line to `issues.md` that says which file was not saved and what came back. Do not end it with "the run stopped". The report has already gone out.
 
 5. **Stopped: send the "Run Stopped" email** to `email.status_recipients`. Then you're done.
 
@@ -150,11 +156,20 @@ Don't suggest re-running to replace copied figures. A re-run never overwrites va
 
 ## Outputs
 - The emails, sent
-- `../../run/issues.md` — added to only if the report email fails to send
+- On a good run, the two report PDFs, saved in the `pdf_folder` folder in OneDrive
+- `../../run/issues.md` — added to only if the report email fails to send, or a PDF is not saved
 
 ## Technical details
 
 **Reading the report date** — once found, read it, e.g. `GET /v1.0/drives/{driveId}/items/{itemId}/workbook/worksheets('EMAIL.1')/range(address='E3')?$select=values,text`. The value is an Excel date serial number (days since 30 December 1899), e.g. `46295` is 30 Sep 2026.
+
+**Saving a PDF to OneDrive** — one request for each file, with the PDF as the body and the header `Content-Type: application/pdf`:
+
+```
+PUT /v1.0/drives/{driveId}/root:/{pdf_folder}/{file name}:/content?@microsoft.graph.conflictBehavior=replace
+```
+
+Write each space in the path as `%20`, e.g. `Saudi%20FO%20-%2030%20Sep%202026.pdf`. A reply of `200` or `201` means it was saved. This simple upload takes files up to 250 MB. The PDFs are about 1 MB.
 
 **Sending an email** — every email is sent from the `email.sender` mailbox:
 

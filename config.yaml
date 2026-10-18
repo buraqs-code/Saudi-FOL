@@ -27,6 +27,12 @@ market_flows_workbook:
   # (the file is currently called "New_Saudi Market Flows").
   filename_contains: Saudi Market Flows
 
+# --------------------------------------------------------------------
+# Where a copy of each day's report PDFs is saved, in the same OneDrive
+# Used by: stages/09_send-report
+# --------------------------------------------------------------------
+pdf_folder: AI_AUTOMATIONS/FOL/PDFs
+
 
 # --------------------------------------------------------------------
 # The pages on the Saudi Exchange website the data comes from

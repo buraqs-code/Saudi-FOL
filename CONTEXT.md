@@ -10,7 +10,7 @@
 
 ## Settings — `config.yaml`
 
-Three things live in `config.yaml` at the top level: where the workbooks are (whose OneDrive, which folder, how each one's name is recognised — the main workbook and the market flows workbook), the web addresses the data is fetched from, and who the report goes to. If one of those needs changing, change it there rather than in a stage's instructions.
+Four things live in `config.yaml` at the top level: where the workbooks are (whose OneDrive, which folder, how each one's name is recognised — the main workbook and the market flows workbook), where the report PDFs are saved, the web addresses the data is fetched from, and who the report goes to. If one of those needs changing, change it there rather than in a stage's instructions.
 
 Everything else stays in the stage that uses it — sheet names, how the workbook is laid out, how the site is fetched from, sign-in details. No secret is in `config.yaml`, or anywhere else in this project.
 ## Stages
@@ -25,7 +25,7 @@ Everything else stays in the stage that uses it — sheet names, how the workboo
 | `stages/06_build_report/` | Set the report date in `EMAIL.1` to the last trading day (the date on the FO page). On Friday, Saturday, or when there is no new trading day, set no date and send no report |
 | `stages/07_export_pdf/` | Make three PDFs: `EMAIL.1` (the table) and `EMAIL.CHARTS` (the company charts) for the attachments, and `Email.0` with `EMAIL.2` for the email body, each from its own throwaway copy of the workbook |
 | `stages/08_market_flows/` | Check saudiexchange.sa for a new weekly market flows report, update the separate market flows workbook if there is one, and make its graphs for the email. Never stops the run. **Still being designed**, see its own `CONTEXT.md` |
-| `stages/09_send-report/` | Email the report, then a "Run Succeeded" or "Run Stopped" email. On a no-report run, only a "No report" email. Every run ends here, even one that stopped early |
+| `stages/09_send-report/` | Email the report and save its two PDFs to OneDrive, then a "Run Succeeded" or "Run Stopped" email. On a no-report run, only a "No report" email. Every run ends here, even one that stopped early |
 
 ## The `run/` folder — files shared between stages, for one run
 
