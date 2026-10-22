@@ -96,7 +96,7 @@ The "Run Stopped" email is the exception. The run may have stopped before the re
 
 5. **Stopped: send the "Run Stopped" email** to `email.status_recipients`. Then you're done.
 
-   - **Subject:** `FOL: Run Stopped - 1 Oct 2026`
+   - **Subject:** `FOL: Run Stopped | 1 Oct 2026`
    - **Body:** one line, then the issues table:
 
      > FOL stopped on 1 Oct 2026. The report was not sent.
@@ -108,7 +108,7 @@ The "Run Stopped" email is the exception. The run may have stopped before the re
 6. **Succeeded: send the "Run Succeeded" email** to `email.status_recipients`.
 
    - **No issues:**
-     - Subject: `FOL: Run Succeeded - 30 Sep 2026`
+     - Subject: `FOL: Run Succeeded | 30 Sep 2026`
      - Body: `FOL ran successfully for 30 Sep 2026.`
    - **Some issues:**
      - Subject: `FOL: Run Succeeded, 2 issues to review - 30 Sep 2026` (or `1 issue`)
@@ -117,7 +117,7 @@ The "Run Stopped" email is the exception. The run may have stopped before the re
 
 7. **No report: send the "No report" email** to `email.status_recipients`. Then stop.
 
-   - **Subject:** `FOL: No report - 10 Oct 2026`. Use today's date in Pakistan time.
+   - **Subject:** `FOL: No report | 10 Oct 2026`. Use today's date in Pakistan time.
    - The examples below are for runs on Friday 9 Oct and Saturday 10 Oct. The date after "Sheets updated for" is the date of the row that this run added.
    - **Body, weekend run** (the "No report:" line starts with "No report: weekend run"):
 
