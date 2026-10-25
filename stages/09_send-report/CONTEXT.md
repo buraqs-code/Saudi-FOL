@@ -111,7 +111,7 @@ The "Run Stopped" email is the exception. The run may have stopped before the re
      - Subject: `FOL: Run Succeeded | 30 Sep 2026`
      - Body: `FOL ran successfully for 30 Sep 2026.`
    - **Some issues:**
-     - Subject: `FOL: Run Succeeded, 2 issues to review - 30 Sep 2026` (or `1 issue`)
+     - Subject: `FOL: Run Succeeded, 2 issues to review | 30 Sep 2026` (or `1 issue`)
      - Body: the same line, then the issues table.
    - **Market flows updated:** if `issues.md` has lines that start with "Market flows updated:", put each one in the body, under the first line, as written. For example: "Market flows updated: the weekly charts now go to 8 Oct 2026." These lines are not issues. On a day with no new report, there is no such line, and the email says nothing about market flows.
 
