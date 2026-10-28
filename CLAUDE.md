@@ -31,3 +31,8 @@ The folders carry the order things happen in, the nesting carries the context, a
 - **Write every instruction file so someone can read it cold and follow what happens**. This includes someone who hasn't worked with code before. Plain words, short sentences, concrete examples.
 - **Where something genuinely can't be explained without technical detail** (a URL, an exact data format), gather it into a section at the end of the file and explain in plain terms above it what that detail achieves. Mark the section as required in order to run the step.
 - **Always refer to the technical details in a stage's `CONTEXT.md` when it has them**.
+
+
+## Permissions
+
+The agent is allowed to do everything the `CONTEXT.md` files require in order to run. That includes commands such as running commands and scripts, fetching web pages (including using `curl_cffi` to get past the Saudi Exchange site's 403 block, which the owner has approved), calling the Graph API, sending the email, and writing files in `run/` etc. Do not stop to ask for permission for a step a `CONTEXT.md` file tells you to do.
