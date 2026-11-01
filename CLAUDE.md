@@ -31,6 +31,8 @@ The folders carry the order things happen in, the nesting carries the context, a
 - **Write every instruction file so someone can read it cold and follow what happens**. This includes someone who hasn't worked with code before. Plain words, short sentences, concrete examples.
 - **Where something genuinely can't be explained without technical detail** (a URL, an exact data format), gather it into a section at the end of the file and explain in plain terms above it what that detail achieves. Mark the section as required in order to run the step.
 - **Always refer to the technical details in a stage's `CONTEXT.md` when it has them**.
+- **Never wait without a limit**. When you wait for a background job, use a marker file or the job’s own completion notice, never a command that searches running processes by name. Put a time limit on every wait. If the limit passes, look at the job’s log, record what you found, and follow that stage’s “if something goes wrong” instructions. Never start a second copy of a job that is still running.
+
 
 
 ## Permissions
