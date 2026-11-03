@@ -32,7 +32,7 @@ The folders carry the order things happen in, the nesting carries the context, a
 - **Where something genuinely can't be explained without technical detail** (a URL, an exact data format), gather it into a section at the end of the file and explain in plain terms above it what that detail achieves. Mark the section as required in order to run the step.
 - **Always refer to the technical details in a stage's `CONTEXT.md` when it has them**.
 - **Never wait without a limit**. When you wait for a background job, use a marker file or the job’s own completion notice, never a command that searches running processes by name. Put a time limit on every wait. If the limit passes, look at the job’s log, record what you found, and follow that stage’s “if something goes wrong” instructions. Never start a second copy of a job that is still running.
-
+- **Keep shell commands simple so the permission checker can parse them.** Write any multi-line script to a file in the scratchpad with the Write tool, then run it as one plain command (`python3 -I <file> <args>`). Never use heredocs, `python3 -c`, or `&&`/`;`/pipe chains. If a command still needs approval, log it to `run/issues.md` and move on to the next step.
 
 
 ## Permissions
