@@ -27,7 +27,7 @@ The folders carry the order things happen in, the nesting carries the context, a
 | clarifying or adding a step | update that stage's `CONTEXT.md` directly, then update `CONTEXT.md`'s stage table if the shape changed |
 
 ## Rules
-
+- **Start every run from the latest `main`.** Before stage 1, run `git fetch origin main` and `git checkout main`, then `git reset --hard origin/main`. Then confirm `checkpoint.json` matches `git show origin/main:checkpoint.json`. The local copy can be stale, and a stale `checkpoint.json` makes the run reprocess announcements and re-send emails that an earlier run already sent.
 - **Write every instruction file so someone can read it cold and follow what happens**. This includes someone who hasn't worked with code before. Plain words, short sentences, concrete examples.
 - **Where something genuinely can't be explained without technical detail** (a URL, an exact data format), gather it into a section at the end of the file and explain in plain terms above it what that detail achieves. Mark the section as required in order to run the step.
 - **Always refer to the technical details in a stage's `CONTEXT.md` when it has them**.
