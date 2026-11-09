@@ -1,6 +1,6 @@
 # 8e_export-graphs: get the market flows charts as pictures
 
-The Task: get each chart on the `M.Email` and `W.Email` sheets of the market flows workbook as a picture. Stage 09 puts them in the email.
+The Task: get each chart on the `M.Email` and `W.Email` sheets of the market flows workbook as a picture. Also note the last date that each sheet's charts show. Stage 09 puts the pictures in the email, with a "last updated" line above the monthly charts and one above the weekly charts.
 
 If the pictures cannot be made, use the fallback: make one PDF of the two sheets. The fallback is the older method. It works, but its pictures are less sharp.
 
@@ -15,25 +15,29 @@ This step does not change the charts or the workbook. They follow the data by th
 
 ## Process
 
-1. **Remove old output.** If `../../../run/8e_charts/` or `../../../run/8e_graphs.pdf` is there, delete it. Stage 09 must only find this run's charts.
+1. **Remove old output.** If `../../../run/8e_charts/`, `../../../run/8e_graphs.pdf` or `../../../run/8e_dates.json` is there, delete it. Stage 09 must only find this run's charts and dates.
 
-2. **List the charts.** Do `M.Email` first, then `W.Email`. The email shows the monthly charts first. On each sheet, put the charts in order from top to bottom. If two charts are at the same height, put the left one first. Note each chart's title.
+2. **Note the latest dates.** On `M.Email` and on `W.Email`, read the last date in column A, from row 7 down. The charts show one row for each month or week, so this is the last month or week that the charts show. This only reads.
 
-3. **Get each chart as a picture.** Get them in the order from step 2. Save them in `../../../run/8e_charts/` as `01.png`, `02.png`, and so on.
+   If a date cannot be read, add a line to `../../../run/issues.md` that starts with "Market flows:" and says which sheet. Continue without that date. Stage 09 then leaves out the "last updated" line for that sheet.
 
-4. **Check each picture.** Open it and look at it. It must be a real image. The chart must be drawn, not blank, and not cut off. The title must be the title from step 2.
+3. **List the charts.** Do `M.Email` first, then `W.Email`. The email shows the monthly charts first. On each sheet, put the charts in order from top to bottom. If two charts are at the same height, put the left one first. Note each chart's title.
 
-5. **If every picture passes,** you are done. Go to "Next".
+4. **Get each chart as a picture.** Get them in the order from step 3. Save them in `../../../run/8e_charts/` as `01.png`, `02.png`, and so on.
+
+5. **Check each picture.** Open it and look at it. It must be a real image. The chart must be drawn, not blank, and not cut off. The title must be the title from step 3.
+
+6. **If every picture passes,** write `../../../run/8e_dates.json`. It holds the two dates from step 2. See "Technical details". Then go to "Next".
 
    If a picture fails, get it again, up to 3 times. If it still fails, delete `../../../run/8e_charts/`. Add a line to `../../../run/issues.md` that starts with "Market flows:" and says which chart failed and what came back. Say that the PDF fallback was used. Then do the fallback. Do not mix pictures from the two methods.
 
 ## Fallback: make a PDF
 
-Do this only if step 5 sends you here.
+Do this only if step 6 sends you here.
 
 The work is done on a throwaway copy of the market flows workbook, never on the workbook itself. Hiding sheets in the real workbook would change it for everyone who opens it.
 
-1. **Note the latest dates.** In the real market flows workbook, read the last date in column A of `W.Email` and of `M.Email`. This is read only. Fallback step 4 uses these dates.
+1. **Use the latest dates from step 2.** Fallback step 4 checks the copy against them. If step 2 could not read a date, read it again now. If it still cannot be read, go to "If something fails".
 
 2. **Clear out any old copy.** Look in the workbook's folder for a file named `FOL_mf_export_temp.xlsx`. If one is there, an earlier run did not delete it. Delete it now. Add a line to `../../../run/issues.md` that starts with "Market flows:" and says that an old copy was found and deleted.
 
@@ -45,7 +49,7 @@ The work is done on a throwaway copy of the market flows workbook, never on the 
 
 6. **Get the copy as a PDF.** Save it as `../../../run/8e_graphs.pdf`. The sheets come out in tab order, so `M.Email` comes first. The print area and page breaks on each sheet set how the charts are split across pages.
 
-7. **Check the PDF.** It must be a real PDF with at least one page. Look at each page as an image. Each page must show charts that are drawn, not empty boxes. If the PDF is wrong, wait 30 seconds and get it again, up to 3 times.
+7. **Check the PDF.** It must be a real PDF with at least one page. Look at each page as an image. Each page must show charts that are drawn, not empty boxes. If the PDF is wrong, wait 30 seconds and get it again, up to 3 times. If the PDF passes, write `../../../run/8e_dates.json` with the two dates from step 2. See "Technical details".
 
 8. **Delete the copy.** Do this every time, also when an earlier step failed. Close any open session on the copy first.
 
@@ -58,7 +62,8 @@ The email still goes out, without the market flows charts.
 ## Outputs
 - `../../../run/8e_charts/`: one picture for each chart, `M.Email` first, then `W.Email`, top to bottom
 - or, only if the fallback was used, `../../../run/8e_graphs.pdf`: the `M.Email` pages, then the `W.Email` pages
-- `../../../run/issues.md`, added to only if the fallback was used, something failed, or an old copy was found
+- `../../../run/8e_dates.json`: the last date on each sheet. Only there if the pictures or the PDF passed
+- `../../../run/issues.md`, added to only if the fallback was used, something failed, a date could not be read, or an old copy was found
 - The real workbook is not changed. No copy stays in the folder.
 
 ## Next
@@ -68,6 +73,21 @@ Go to `stages/09_send-report/`.
 ## Technical details
 
 *Required to run this step.*
+
+### The dates
+
+**Reading the dates.** `GET /v1.0/drives/{driveId}/items/{itemId}/workbook/worksheets('M.Email')/usedRange?$select=address,values`, then the same for `W.Email`. The dates are the numbers in column A, from row 7 down. Take the last one. Skip empty cells and text.
+
+Excel keeps a date as a number of days since 30 December 1899. For example, `46295` is 30 Sep 2026. Change it to a date and write it like `30 Sep 2026`.
+
+**`8e_dates.json`.** `monthly` is from `M.Email` and `weekly` is from `W.Email`. If a date could not be read, write `null`.
+
+```json
+{
+  "monthly": { "last_date": "30 Sep 2026" },
+  "weekly":  { "last_date": "8 Oct 2026" }
+}
+```
 
 ### The pictures
 

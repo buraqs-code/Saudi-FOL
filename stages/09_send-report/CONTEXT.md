@@ -14,6 +14,7 @@ Every run ends here, including one that stopped early.
 - `../../run/issues.md` — may not exist. If it doesn't, there were no issues.
 - `../../run/7_table.pdf`, `../../run/7_charts.pdf`, `../../run/7_body.pdf` — only there on a good run
 - `../../run/8e_charts/` — the market flows charts, one picture each. Or `../../run/8e_graphs.pdf`, if step 8e used its fallback. Only there if stage 08 ran and its step 8e worked
+- `../../run/8e_dates.json` — the last date the monthly and weekly charts show. Made by step 8e, with the charts
 
 ## Process
 
@@ -34,10 +35,13 @@ The "Run Stopped" email is the exception. The run may have stopped before the re
 3. **Send the report email** to `email.report_recipients`.
 
    - **Subject:** `Saudi Foreign Ownership - 30 Sep 2026`
-   - **Body:** a greeting and one line, then two pictures, `Email.0` first and `EMAIL.2` second, then the market flows charts, then the sign-off:
+   - **Body:** a greeting and one line, then the two "last updated" lines, then two pictures, `Email.0` first and `EMAIL.2` second, then the market flows charts, then the sign-off:
 
      > Dear Team, 
      > Please find the top foreign buying and selling on the Saudi Exchange for 30 Sep 2026. The full report is attached.
+     >
+     > Monthly charts last updated: 30 Sep 2026
+     > Weekly charts last updated: 8 Oct 2026
      >
      > *[picture of Email.0]*
      >
@@ -48,7 +52,7 @@ The "Run Stopped" email is the exception. The run may have stopped before the re
      > Regards,
      > Buraq
 
-   - **If `issues.md` has a line starting "FO page behind:"**, add one more line to the body, right after "The full report is attached.":
+   - **If `issues.md` has a line starting "FO page behind:"**, add one more line to the body, right after "The full report is attached." The "last updated" lines then come after this note:
 
      > Note: the foreign ownership figures for 30 Sep 2026 weren't available, so the figures from 29 Sep 2026 are used. The 1-day buying and selling tables are empty for this reason.
 
@@ -73,6 +77,14 @@ The "Run Stopped" email is the exception. The run may have stopped before the re
    If a picture fails, redo the cutting for that page and look again. If it still fails after one more try:
    - **Part of the table is missing, or the picture is blank:** don't send the report. Add a line to `issues.md` saying which picture was wrong and how, ending with "the run stopped". Then go to step 5.
    - **Only the spacing is off** (the table is all there but has extra white around it): send the report anyway. Add a line to `issues.md` saying which picture had extra white around it.
+
+   **The "last updated" lines.** Take the dates from `8e_dates.json`. Put the two lines at the top of the body, after the first line (and after the "Note:" line, if there is one). Monthly first, then weekly:
+
+     > Monthly charts last updated: 30 Sep 2026
+     > Weekly charts last updated: 8 Oct 2026
+
+   - If a date is `null`, or `8e_dates.json` is not there, leave out that line. Do not guess a date. This does not stop the report.
+   - If all the market flows pictures are left out (see below), leave out both lines too. The email then has no charts for them to describe.
 
    **The market flows charts.** Put them after the `EMAIL.2` picture, with no heading, in order. The monthly charts come first, then the weekly charts.
    - **If `8e_charts/` is there,** use its pictures as they are, in file order (`01.png`, `02.png`, …). Do not cut them.
@@ -204,6 +216,8 @@ A reply of `202` means it was accepted for sending. Anything else means it faile
 and in the body: `<img src="cid:body_1" width="700">`. Number them by page, `body_1`, `body_2` and so on, and put them in the body in that order. The market flows pictures carry on the numbering after the `7_body.pdf` pictures, e.g. `body_3`, `body_4`.
 
 **The `8e_charts/` pictures** are PNGs, about 1400 pixels wide. Attach each one as it is, with `"contentType": "image/png"`. Show it at `width="700"`, the same as the other pictures.
+
+**The "last updated" lines** — plain text in a `<p>`, the same font as the rest of the body. Both lines go in one `<p>`, with a `<br>` between them: `<p>Monthly charts last updated: 30 Sep 2026<br>Weekly charts last updated: 8 Oct 2026</p>`. Put it after the first line of the body (and after the "Note:" line, if there is one), before the first `<img>`.
 
 **Turning the PDF into a picture** — render each page with a PDF library, e.g. `pypdfium2`, at about twice normal size (`scale=2`) so it stays sharp. Then cut off the white margins.
 
