@@ -13,7 +13,7 @@ The folders carry the order things happen in, the nesting carries the context, a
 | `GLOSSARY.md` | recurring terms — the site, the workbook, how access works. Start here if you're new |
 | `CONTEXT.md` | what this automation does, stage by stage |
 | `config.yaml` | the settings — where the workbook is, where the data comes from, who gets the report |
-| `checkpoint.json` | what has to carry over from one run to the next — the days the market flows charts were last updated. The only file a normal run pushes (stage 09, step 8) |
+| `charts_last_updated.json` | the days the monthly and weekly market flows charts were last updated. Carries over from one run to the next. The only file a normal run pushes (stage 09, step 8) |
 | `copying-formulas-down.md` | how to add a row by copying the row above, through Graph. Used by stage 08 |
 | `stages/` | the stages themselves, in the order they run |
 | `run/` | files one stage writes and a later stage reads, within the same run — doesn't exist in a fresh copy |
@@ -28,7 +28,7 @@ The folders carry the order things happen in, the nesting carries the context, a
 | clarifying or adding a step | update that stage's `CONTEXT.md` directly, then update `CONTEXT.md`'s stage table if the shape changed |
 
 ## Rules
-- **Start every run from the latest `main`.** Before stage 1, run `git fetch origin main` and `git checkout main`, then `git reset --hard origin/main`. Then confirm `checkpoint.json` matches `git show origin/main:checkpoint.json`. The local copy can be stale, and a stale `checkpoint.json` makes the run reprocess announcements and re-send emails that an earlier run already sent.
+- **Start every run from the latest `main`.** Before stage 1, run `git fetch origin main` and `git checkout main`, then `git reset --hard origin/main`. Then confirm `charts_last_updated.json` matches `git show origin/main:charts_last_updated.json`. A stale copy makes the email show old "charts last updated" dates.
 - **Write every instruction file so someone can read it cold and follow what happens**. This includes someone who hasn't worked with code before. Plain words, short sentences, concrete examples.
 - **Where something genuinely can't be explained without technical detail** (a URL, an exact data format), gather it into a section at the end of the file and explain in plain terms above it what that detail achieves. Mark the section as required in order to run the step.
 - **Always refer to the technical details in a stage's `CONTEXT.md` when it has them**.

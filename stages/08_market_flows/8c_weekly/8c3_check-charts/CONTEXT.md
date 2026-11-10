@@ -28,7 +28,7 @@ Open a session on the market flows workbook. This step only reads.
 
    This step does not change the result of step 5.
 
-5. **If every weekly chart passes,** add a line to `../../../../run/issues.md` that starts with "Market flows updated:". For example: "Market flows updated: the weekly charts now go to 8 Oct 2026." Use the last date from step 1. Stage 09 shows this line in the "Run Succeeded" email. It is not an issue. Also set `weekly_last_updated` in `../../../../checkpoint.json` to today's date in Pakistan time (UTC + 5 hours), e.g. `10 Nov 2026`. Then go to "Next".
+5. **If every weekly chart passes,** add a line to `../../../../run/issues.md` that starts with "Market flows updated:". For example: "Market flows updated: the weekly charts now go to 8 Oct 2026." Use the last date from step 1. Stage 09 shows this line in the "Run Succeeded" email. It is not an issue. Also set `weekly_last_updated` in `../../../../charts_last_updated.json` to today's date in Pakistan time (UTC + 5 hours), e.g. `10 Nov 2026`. Then go to "Next".
 
 ## If something fails
 
@@ -38,7 +38,7 @@ Step 8e still exports the charts as they are.
 
 ## Outputs
 - `../../../../run/issues.md`: a "Market flows updated:" line if every weekly chart passed, or a "Market flows:" line for each chart that failed. Also a "Market flows:" line if the YTD year is old
-- `../../../../checkpoint.json`: `weekly_last_updated` set to today, only if every weekly chart passed
+- `../../../../charts_last_updated.json`: `weekly_last_updated` set to today, only if every weekly chart passed
 
 ## Next
 

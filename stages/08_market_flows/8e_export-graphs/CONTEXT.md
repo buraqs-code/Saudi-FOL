@@ -12,13 +12,13 @@ This step does not change the charts or the workbook. They follow the data by th
 
 ## Inputs
 - `../../../run/connection.md`: the `driveId` and the market flows workbook's `itemId`
-- `../../../checkpoint.json`: the days the monthly and weekly charts were last updated
+- `../../../charts_last_updated.json`: the days the monthly and weekly charts were last updated
 
 ## Process
 
 1. **Remove old output.** If `../../../run/8e_charts/`, `../../../run/8e_graphs.pdf` or `../../../run/8e_dates.json` is there, delete it. Stage 09 must only find this run's charts and dates.
 
-2. **Note the "last updated" dates.** Take `monthly_last_updated` and `weekly_last_updated` from `../../../checkpoint.json`. These are the days the charts were last updated (8c3 and 8d3 set them), not the dates the charts show.
+2. **Note the "last updated" dates.** Take `monthly_last_updated` and `weekly_last_updated` from `../../../charts_last_updated.json`. These are the days the charts were last updated (8c3 and 8d3 set them), not the dates the charts show.
 
    If a date is missing, add a line to `../../../run/issues.md` that starts with "Market flows:" and says which one. Continue without that date. Stage 09 then leaves out the "last updated" line for that sheet.
 
@@ -79,7 +79,7 @@ Go to `stages/09_send-report/`.
 
 **Reading the sheet dates** (fallback only). `GET /v1.0/drives/{driveId}/items/{itemId}/workbook/worksheets('M.Email')/usedRange?$select=address,values`, then the same for `W.Email`. The dates are the numbers in column A, from row 7 down. Take the last one. Skip empty cells and text. Excel keeps a date as a number of days since 30 December 1899. For example, `46295` is 30 Sep 2026.
 
-**`8e_dates.json`.** `monthly` is `monthly_last_updated` from `checkpoint.json`, and `weekly` is `weekly_last_updated`, copied as written. If a date is missing, write `null`.
+**`8e_dates.json`.** `monthly` is `monthly_last_updated` from `charts_last_updated.json`, and `weekly` is `weekly_last_updated`, copied as written. If a date is missing, write `null`.
 
 ```json
 {

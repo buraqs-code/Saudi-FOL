@@ -145,7 +145,7 @@ The "Run Stopped" email is the exception. The run may have stopped before the re
 
    - If `issues.md` has other lines, add the issues table below.
 
-8. **Save `checkpoint.json`.** Every run ends here, after its emails. If this run changed `checkpoint.json` (8c3 or 8d3 set a new date), commit only that file and push it straight to `main`. Otherwise do nothing. The next run starts from a fresh copy of `main`, so a date that isn't pushed is lost.
+8. **Save `charts_last_updated.json`.** Every run ends here, after its emails. If this run changed `charts_last_updated.json` (8c3 or 8d3 set a new date), commit only that file and push it straight to `main`. Otherwise do nothing. The next run starts from a fresh copy of `main`, so a date that isn't pushed is lost.
 
    If the push fails, try again once. If it still fails, there is nothing more to send. The next run shows the old date.
 
@@ -178,7 +178,7 @@ Don't suggest re-running to replace copied figures. A re-run never overwrites va
 - The emails, sent
 - On a good run, the two report PDFs, saved in the `pdf_folder` folder in OneDrive
 - `../../run/issues.md` — added to only if the report email fails to send, or a PDF is not saved
-- `../../checkpoint.json` — pushed to `main`, only if this run changed it
+- `../../charts_last_updated.json` — pushed to `main`, only if this run changed it
 
 ## Technical details
 
