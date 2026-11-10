@@ -106,7 +106,7 @@ The "Run Stopped" email is the exception. The run may have stopped before the re
 
    If a file with that name is already there, replace it. If an upload fails, try again. If it still fails, add a line to `issues.md` that says which file was not saved and what came back. Do not end it with "the run stopped". The report has already gone out.
 
-5. **Stopped: send the "Run Stopped" email** to `email.status_recipients`. Then you're done.
+5. **Stopped: send the "Run Stopped" email** to `email.status_recipients`.
 
    - **Subject:** `FOL: Run Stopped | 1 Oct 2026`
    - **Body:** one line, then the issues table:
@@ -116,6 +116,8 @@ The "Run Stopped" email is the exception. The run may have stopped before the re
      If the run stopped only because the report email failed (step 4), the sheets were already updated. Say so instead, using the report date:
 
      > The sheets were updated for 30 Sep 2026, but the report email couldn't be sent.
+
+   Then go to step 8.
 
 6. **Succeeded: send the "Run Succeeded" email** to `email.status_recipients`.
 
@@ -127,7 +129,9 @@ The "Run Stopped" email is the exception. The run may have stopped before the re
      - Body: the same line, then the issues table.
    - **Market flows updated:** if `issues.md` has lines that start with "Market flows updated:", put each one in the body, under the first line, as written. For example: "Market flows updated: the weekly charts now go to 8 Oct 2026." These lines are not issues. On a day with no new report, there is no such line, and the email says nothing about market flows.
 
-7. **No report: send the "No report" email** to `email.status_recipients`. Then stop.
+   Then go to step 8.
+
+7. **No report: send the "No report" email** to `email.status_recipients`. Then go to step 8.
 
    - **Subject:** `FOL: No report | 10 Oct 2026`. Use today's date in Pakistan time.
    - The examples below are for runs on Friday 9 Oct and Saturday 10 Oct. The date after "Sheets updated for" is the date of the row that this run added.
@@ -140,6 +144,10 @@ The "Run Stopped" email is the exception. The run may have stopped before the re
      > No new trading day. The FO page shows 8 Oct 2026. This day was in the last report. Sheets updated for 9 Oct 2026. Report not sent. Possible causes: a market holiday, or the FO page did not update.
 
    - If `issues.md` has other lines, add the issues table below.
+
+8. **Save `checkpoint.json`.** Every run ends here, after its emails. If this run changed `checkpoint.json` (8c3 or 8d3 set a new date), commit only that file and push it straight to `main`. Otherwise do nothing. The next run starts from a fresh copy of `main`, so a date that isn't pushed is lost.
+
+   If the push fails, try again once. If it still fails, there is nothing more to send. The next run shows the old date.
 
 ### The issues table
 
@@ -170,6 +178,7 @@ Don't suggest re-running to replace copied figures. A re-run never overwrites va
 - The emails, sent
 - On a good run, the two report PDFs, saved in the `pdf_folder` folder in OneDrive
 - `../../run/issues.md` — added to only if the report email fails to send, or a PDF is not saved
+- `../../checkpoint.json` — pushed to `main`, only if this run changed it
 
 ## Technical details
 

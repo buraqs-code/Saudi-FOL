@@ -1,6 +1,6 @@
 # 8e_export-graphs: get the market flows charts as pictures
 
-The Task: get each chart on the `M.Email` and `W.Email` sheets of the market flows workbook as a picture. Also note the last date that each sheet's charts show. Stage 09 puts the pictures in the email, with a "last updated" line above the monthly charts and one above the weekly charts.
+The Task: get each chart on the `M.Email` and `W.Email` sheets of the market flows workbook as a picture. Also note the day each sheet's charts were last updated. Stage 09 puts the pictures in the email, with a "last updated" line above the monthly charts and one above the weekly charts.
 
 If the pictures cannot be made, use the fallback: make one PDF of the two sheets. The fallback is the older method. It works, but its pictures are less sharp.
 
@@ -12,14 +12,15 @@ This step does not change the charts or the workbook. They follow the data by th
 
 ## Inputs
 - `../../../run/connection.md`: the `driveId` and the market flows workbook's `itemId`
+- `../../../checkpoint.json`: the days the monthly and weekly charts were last updated
 
 ## Process
 
 1. **Remove old output.** If `../../../run/8e_charts/`, `../../../run/8e_graphs.pdf` or `../../../run/8e_dates.json` is there, delete it. Stage 09 must only find this run's charts and dates.
 
-2. **Note the latest dates.** On `M.Email` and on `W.Email`, read the last date in column A, from row 7 down. The charts show one row for each month or week, so this is the last month or week that the charts show. This only reads.
+2. **Note the "last updated" dates.** Take `monthly_last_updated` and `weekly_last_updated` from `../../../checkpoint.json`. These are the days the charts were last updated (8c3 and 8d3 set them), not the dates the charts show.
 
-   If a date cannot be read, add a line to `../../../run/issues.md` that starts with "Market flows:" and says which sheet. Continue without that date. Stage 09 then leaves out the "last updated" line for that sheet.
+   If a date is missing, add a line to `../../../run/issues.md` that starts with "Market flows:" and says which one. Continue without that date. Stage 09 then leaves out the "last updated" line for that sheet.
 
 3. **List the charts.** Do `M.Email` first, then `W.Email`. The email shows the monthly charts first. On each sheet, put the charts in order from top to bottom. If two charts are at the same height, put the left one first. Note each chart's title.
 
@@ -37,7 +38,7 @@ Do this only if step 6 sends you here.
 
 The work is done on a throwaway copy of the market flows workbook, never on the workbook itself. Hiding sheets in the real workbook would change it for everyone who opens it.
 
-1. **Use the latest dates from step 2.** Fallback step 4 checks the copy against them. If step 2 could not read a date, read it again now. If it still cannot be read, go to "If something fails".
+1. **Read the latest dates in the real workbook.** On `M.Email` and `W.Email`, read the last date in column A, from row 7 down. Fallback step 4 checks the copy against them. If a date cannot be read, go to "If something fails".
 
 2. **Clear out any old copy.** Look in the workbook's folder for a file named `FOL_mf_export_temp.xlsx`. If one is there, an earlier run did not delete it. Delete it now. Add a line to `../../../run/issues.md` that starts with "Market flows:" and says that an old copy was found and deleted.
 
@@ -62,7 +63,7 @@ The email still goes out, without the market flows charts.
 ## Outputs
 - `../../../run/8e_charts/`: one picture for each chart, `M.Email` first, then `W.Email`, top to bottom
 - or, only if the fallback was used, `../../../run/8e_graphs.pdf`: the `M.Email` pages, then the `W.Email` pages
-- `../../../run/8e_dates.json`: the last date on each sheet. Only there if the pictures or the PDF passed
+- `../../../run/8e_dates.json`: the day each sheet's charts were last updated. Only there if the pictures or the PDF passed
 - `../../../run/issues.md`, added to only if the fallback was used, something failed, a date could not be read, or an old copy was found
 - The real workbook is not changed. No copy stays in the folder.
 
@@ -76,11 +77,9 @@ Go to `stages/09_send-report/`.
 
 ### The dates
 
-**Reading the dates.** `GET /v1.0/drives/{driveId}/items/{itemId}/workbook/worksheets('M.Email')/usedRange?$select=address,values`, then the same for `W.Email`. The dates are the numbers in column A, from row 7 down. Take the last one. Skip empty cells and text.
+**Reading the sheet dates** (fallback only). `GET /v1.0/drives/{driveId}/items/{itemId}/workbook/worksheets('M.Email')/usedRange?$select=address,values`, then the same for `W.Email`. The dates are the numbers in column A, from row 7 down. Take the last one. Skip empty cells and text. Excel keeps a date as a number of days since 30 December 1899. For example, `46295` is 30 Sep 2026.
 
-Excel keeps a date as a number of days since 30 December 1899. For example, `46295` is 30 Sep 2026. Change it to a date and write it like `30 Sep 2026`.
-
-**`8e_dates.json`.** `monthly` is from `M.Email` and `weekly` is from `W.Email`. If a date could not be read, write `null`.
+**`8e_dates.json`.** `monthly` is `monthly_last_updated` from `checkpoint.json`, and `weekly` is `weekly_last_updated`, copied as written. If a date is missing, write `null`.
 
 ```json
 {

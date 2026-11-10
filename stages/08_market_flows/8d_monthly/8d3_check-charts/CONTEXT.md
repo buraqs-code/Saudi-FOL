@@ -20,7 +20,7 @@ Open a session on the market flows workbook. This step only reads.
 
 3. **If a chart is one value short, wait 30 seconds and check it once more.** OneDrive can take that long to save the new row.
 
-4. **If every chart passes,** add a line to `../../../../run/issues.md` that starts with "Market flows updated:". For example: "Market flows updated: the monthly charts now go to 31 Oct 2026." Use the last date from step 1. Stage 09 shows this line in the "Run Succeeded" email. It is not an issue. Then go to "Next".
+4. **If every chart passes,** add a line to `../../../../run/issues.md` that starts with "Market flows updated:". For example: "Market flows updated: the monthly charts now go to 31 Oct 2026." Use the last date from step 1. Stage 09 shows this line in the "Run Succeeded" email. It is not an issue. Also set `monthly_last_updated` in `../../../../checkpoint.json` to today's date in Pakistan time (UTC + 5 hours), e.g. `10 Nov 2026`. Then go to "Next".
 
 ## If something fails
 
@@ -30,6 +30,7 @@ Step 8e still exports the charts as they are.
 
 ## Outputs
 - `../../../../run/issues.md`: a "Market flows updated:" line if every chart passed, or a "Market flows:" line for each chart that failed
+- `../../../../checkpoint.json`: `monthly_last_updated` set to today, only if every chart passed
 
 ## Next
 
